@@ -8,61 +8,55 @@
 </head>
 <body>
   <main class="shell">
-    <section class="hero">
-      <div>
-        <p class="eyebrow">Painel pessoal</p>
-        <h1>PulseHabits</h1>
-        <p class="subtitle">Acompanhe habitos, metas semanais e progresso diario com backend e banco SQLite.</p>
+    <section id="authView" class="auth-view">
+      <div class="auth-copy">
+        <p class="eyebrow">PulseHabits</p>
+        <h1>Seu painel de habitos com historico real.</h1>
+        <p class="subtitle">Entre, acompanhe metas, registre dias anteriores, veja graficos e exporte seus dados.</p>
       </div>
-      <div class="scoreboard" aria-label="Resumo de progresso">
-        <span id="todayScore">0%</span>
-        <small>concluido hoje</small>
-      </div>
-    </section>
 
-    <section class="stats" aria-label="Indicadores">
-      <article>
-        <span id="totalHabits">0</span>
-        <p>habitos ativos</p>
-      </article>
-      <article>
-        <span id="doneToday">0</span>
-        <p>feitos hoje</p>
-      </article>
-      <article>
-        <span id="weekAverage">0%</span>
-        <p>media semanal</p>
-      </article>
-    </section>
-
-    <section class="workspace">
-      <form id="habitForm" class="panel">
-        <h2>Novo habito</h2>
+      <form id="authForm" class="panel auth-panel">
+        <h2>Acessar conta</h2>
         <label>
-          Nome
-          <input id="name" name="name" required placeholder="Ex: Praticar ingles">
+          Usuario
+          <input id="username" name="username" autocomplete="username" required placeholder="Ex: ruan">
         </label>
         <label>
-          Categoria
-          <select id="category" name="category">
-            <option>Estudos</option>
-            <option>Saude</option>
-            <option>Foco</option>
-            <option>Trabalho</option>
-            <option>Geral</option>
-          </select>
+          Senha
+          <input id="password" name="password" type="password" autocomplete="current-password" required placeholder="Minimo 4 caracteres">
         </label>
-        <label>
-          Meta semanal
-          <input id="weeklyGoal" name="weeklyGoal" type="number" min="1" max="7" value="5">
-        </label>
-        <button type="submit">Adicionar</button>
-        <p id="formMessage" class="message" role="status"></p>
+        <div class="button-row">
+          <button type="submit" data-mode="login">Entrar</button>
+          <button type="submit" data-mode="register" class="secondary">Criar conta</button>
+        </div>
+        <p class="hint">Conta de teste: demo / demo123</p>
+        <p id="authMessage" class="message" role="status"></p>
       </form>
+    </section>
 
-      <section class="panel list-panel">
-        <div class="list-header">
-          <h2>Meus habitos</h2>
+    <section id="appView" class="app-view hidden">
+      <section class="hero">
+        <div>
+          <p class="eyebrow">Painel pessoal</p>
+          <h1>PulseHabits</h1>
+          <p class="subtitle">Acompanhe habitos, metas semanais, historico e progresso diario com backend e banco SQLite.</p>
+        </div>
+        <div class="hero-actions">
+          <div class="scoreboard" aria-label="Resumo de progresso">
+            <span id="todayScore">0%</span>
+            <small>concluido hoje</small>
+          </div>
+          <button id="logoutButton" class="ghost" type="button">Sair</button>
+        </div>
+      </section>
+
+      <section class="toolbar panel">
+        <label>
+          Data de registro
+          <input id="activeDate" type="date">
+        </label>
+        <label>
+          Filtro
           <select id="filter">
             <option value="Todos">Todos</option>
             <option>Estudos</option>
@@ -71,8 +65,74 @@
             <option>Trabalho</option>
             <option>Geral</option>
           </select>
+        </label>
+        <label>
+          Lembrete diario
+          <input id="reminderTime" type="time">
+        </label>
+        <button id="enableNotifications" type="button" class="secondary">Ativar lembrete</button>
+        <a class="download" href="/api/export.csv">Exportar CSV</a>
+      </section>
+
+      <section class="stats" aria-label="Indicadores">
+        <article>
+          <span id="totalHabits">0</span>
+          <p>habitos ativos</p>
+        </article>
+        <article>
+          <span id="doneToday">0</span>
+          <p>feitos hoje</p>
+        </article>
+        <article>
+          <span id="weekAverage">0%</span>
+          <p>media semanal</p>
+        </article>
+        <article>
+          <span id="bestStreak">0</span>
+          <p>melhor sequencia</p>
+        </article>
+      </section>
+
+      <section class="workspace">
+        <form id="habitForm" class="panel">
+          <h2>Novo habito</h2>
+          <label>
+            Nome
+            <input id="name" name="name" required placeholder="Ex: Praticar ingles">
+          </label>
+          <label>
+            Categoria
+            <select id="category" name="category">
+              <option>Estudos</option>
+              <option>Saude</option>
+              <option>Foco</option>
+              <option>Trabalho</option>
+              <option>Geral</option>
+            </select>
+          </label>
+          <label>
+            Meta semanal
+            <input id="weeklyGoal" name="weeklyGoal" type="number" min="1" max="7" value="5">
+          </label>
+          <button type="submit">Adicionar</button>
+          <p id="formMessage" class="message" role="status"></p>
+        </form>
+
+        <section class="panel list-panel">
+          <div class="list-header">
+            <h2>Meus habitos</h2>
+            <p id="currentUser" class="muted"></p>
+          </div>
+          <div id="habitList" class="habit-list"></div>
+        </section>
+      </section>
+
+      <section class="panel history-panel">
+        <div class="list-header">
+          <h2>Historico dos ultimos 30 dias</h2>
+          <p class="muted">Cada barra mostra a porcentagem de habitos feitos naquele dia.</p>
         </div>
-        <div id="habitList" class="habit-list"></div>
+        <div id="historyChart" class="chart" aria-label="Grafico de historico"></div>
       </section>
     </section>
   </main>
